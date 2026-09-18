@@ -1,0 +1,17 @@
+---
+- name: Self-Healing Remediation Playbook
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Log remediation start
+      ansible.builtin.debug:
+        msg: "Alert received! Starting Self-Healing process for self-healing-app..."
+
+    - name: Restart Kubernetes Deployment
+      ansible.builtin.command:
+        cmd: kubectl rollout restart deployment/self-healing-app
+      register: result
+
+    - name: Log remediation result
+      ansible.builtin.debug:
+        msg: "{{ result.stdout }}"
