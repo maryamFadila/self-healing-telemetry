@@ -4,7 +4,6 @@ import time
 
 app = Flask(__name__)
 
-# تعريف الـ Metrics الخاصة بـ Prometheus
 REQUEST_COUNT = Counter(
     'http_requests_total', 
     'Total HTTP Requests', 
@@ -25,7 +24,6 @@ def home():
     start_time = time.time()
     status_code = 200
     
-    # تسجيل المقاييس
     duration = time.time() - start_time
     REQUEST_LATENCY.labels(endpoint='/').observe(duration)
     REQUEST_COUNT.labels(method='GET', endpoint='/', status_code=status_code).inc()
@@ -34,7 +32,7 @@ def home():
 
 @app.route('/simulate-failure')
 def simulate_failure():
-    # افتعال عطل (HTTP 500) واحتسابه في العدادات
+
     status_code = 500
     FAILURE_COUNT.inc()
     REQUEST_COUNT.labels(method='GET', endpoint='/simulate-failure', status_code=status_code).inc()
@@ -43,7 +41,7 @@ def simulate_failure():
 
 @app.route('/metrics')
 def metrics():
-    # إظهار المقاييس لتسجيلها بواسطة Prometheus
+   
     return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
 
 if __name__ == '__main__':

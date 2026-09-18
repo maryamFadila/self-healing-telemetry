@@ -15,7 +15,6 @@ def webhook():
         if alert.get('labels', {}).get('alertname') == 'AppHighFailureRate':
             logging.info("Triggering Ansible Playbook for Remediation...")
             
-            # تشغيل Ansible Playbook محلياً
             res = subprocess.run(
                 ["ansible-playbook", "kubernetes/heal.yml"],
                 capture_output=True,
